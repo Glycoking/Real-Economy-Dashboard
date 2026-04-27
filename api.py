@@ -10,6 +10,13 @@ def api_call(url:str):
     else:
         raise ValueError("API call failed, check URL is correct and working")
     
-url = "https://data360api.worldbank.org/data360/data?DATABASE_ID=WB_WDI&INDICATOR=WB_WDI_SP_POP_TOTL&skip=0"
-data = api_call(url)
-print(data)
+
+def get_data(url:str) -> pd.DataFrame:
+    data = api_call(url)
+    data_normalized = pd.json_normalize(data[1]) 
+    return data_normalized
+
+url = "https://api.worldbank.org/v2/country/all/indicator/NY.GDP.MKTP.CD?format=json&per_page=20000"
+
+data = get_data(url)
+print(data.sample(20))
